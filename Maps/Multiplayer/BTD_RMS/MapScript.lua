@@ -258,6 +258,7 @@ stack_replacer =
   
   Run =
   function()
+    BlockGame()
     stack_replacer.Init()
     --
     for stack, info in stack_replacer.stacks_info.common do
@@ -280,6 +281,8 @@ stack_replacer =
       local town = GetPlayerRace(PLAYER_1)
       startThread(stack_replacer.Replace, stack, info, town, id, count)
     end
+    sleep(20)
+    startThread(stack_balancer.Init)
   end,
   
   Replace =
@@ -313,6 +316,27 @@ stack_replacer =
 
 startThread(stack_replacer.Run)
 
+stack_balancer =
+{
+  Init =
+  function()
+     for i, creature in GetObjectNamesByType("CREATURE") do
+       for slot = 0, 6 do
+         local id, count = GetObjectArmySlotCreature(creature, slot)
+         if not (id == 0 or count == 0) then
+           local expected_count = ceil(count * AVERAGE_POWERS[GetCreatureTier(id)] / GetCreaturePower(id))
+           --print("count ", count, " expected ", expected_count)
+           if expected_count > count then
+             AddObjectCreatures(creature, id, expected_count - count, slot)
+           elseif expected_count < count then
+             RemoveObjectCreatures(creature, id, count - expected_count, slot)
+           end
+         end
+       end
+     end
+     UnblockGame()
+  end
+}
 --
 --------------------------------------------------------------------------------
 -- Обновленная механика ментора(Gerter 21.11.21)

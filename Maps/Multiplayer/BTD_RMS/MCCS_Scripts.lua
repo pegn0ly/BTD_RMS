@@ -1,5 +1,10 @@
 TIER_TABLES = {}
 
+AVERAGE_POWERS =
+{
+ [1] = 0, [2] = 0, [3] = 0, [4] = 0, [5] = 0, [6] = 0, [7] = 0
+}
+
 TOWN_NO_TYPE = -1
 TOWN_HEAVEN = 0
 TOWN_PRESERVE = 1
@@ -222,6 +227,21 @@ end
 function InitCreaturesTiersTables()
   for i = TOWN_HEAVEN, TOWN_STRONGHOLD do
     TIER_TABLES[i] = SortTownCreaturesByTiers(i)
+  end
+  --
+  local temp_powers = {[1] = 0, [2] = 0, [3] = 0, [4] = 0, [5] = 0, [6] = 0, [7] = 0}
+  for town = TOWN_HEAVEN, TOWN_STRONGHOLD do
+    for tier = 1, 7 do
+      for grade = 2, 3 do
+        temp_powers[tier] = temp_powers[tier] + GetCreaturePower(TIER_TABLES[town][tier][grade])
+      end
+    end
+  end
+  --
+  for i = 1, 7 do
+    local avg_power = temp_powers[i] / 16
+    print("avg power of tier ", i, " is ", avg_power)
+    AVERAGE_POWERS[i] = avg_power
   end
 end
 
