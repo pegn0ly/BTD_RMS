@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Skeleton>
+	<SrcName href="/Dwellings/academy/mag.mb"/>
+	<RootJoint>mag</RootJoint>
+	<MSRFormat>true</MSRFormat>
+	<Animations/>
+	<uid>9BC66A36-91AD-4162-834C-7CD44CA7A152</uid>
+</Skeleton>

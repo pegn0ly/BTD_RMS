@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Effect>
+	<Instances>
+		<Item href="cloud_1.(ParticleInstance).xdb#xpointer(/ParticleInstance)"/>
+		<Item href="cloud_2.(ParticleInstance).xdb#xpointer(/ParticleInstance)"/>
+		<Item href="cloud_3.(ParticleInstance).xdb#xpointer(/ParticleInstance)"/>
+		<Item href="cloud_4.(ParticleInstance).xdb#xpointer(/ParticleInstance)"/>
+		<Item href="mag_tower.(ParticleInstance).xdb#xpointer(/ParticleInstance)"/>
+		<Item href="mag_tower_stone.(ParticleInstance).xdb#xpointer(/ParticleInstance)"/>
+	</Instances>
+	<Lights/>
+	<Models>
+		<Item href="stone.(ModelInstance).xdb#xpointer(/ModelInstance)"/>
+		<Item href="stones.(ModelInstance).xdb#xpointer(/ModelInstance)"/>
+	</Models>
+	<WindAffected>false</WindAffected>
+	<WindPower>1</WindPower>
+	<Duration>2.5</Duration>
+</Effect>
