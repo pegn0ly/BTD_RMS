@@ -1,12 +1,12 @@
 ---- BTD_RMS -----------------
----- by Hottabych и Gerter----
+---- by Hottabych ГЁ Gerter----
 ---- 12.11.2021 --------------
--- Скрипт требует значительных правок и изменений, для повышения
--- читабельности и лёгкости изменений
+-- Г‘ГЄГ°ГЁГЇГІ ГІГ°ГҐГЎГіГҐГІ Г§Г­Г Г·ГЁГІГҐГ«ГјГ­Г»Гµ ГЇГ°Г ГўГ®ГЄ ГЁ ГЁГ§Г¬ГҐГ­ГҐГ­ГЁГ©, Г¤Г«Гї ГЇГ®ГўГ»ГёГҐГ­ГЁГї
+-- Г·ГЁГІГ ГЎГҐГ«ГјГ­Г®Г±ГІГЁ ГЁ Г«ВёГЈГЄГ®Г±ГІГЁ ГЁГ§Г¬ГҐГ­ГҐГ­ГЁГ©
 
---Для себя: коеффы и формулы вынести, всё в таблицу; сделать систему ивентов с привязкой ко дню; коллбэки в строки
+--Г„Г«Гї Г±ГҐГЎГї: ГЄГ®ГҐГґГґГ» ГЁ ГґГ®Г°Г¬ГіГ«Г» ГўГ»Г­ГҐГ±ГІГЁ, ГўГ±Вё Гў ГІГ ГЎГ«ГЁГ¶Гі; Г±Г¤ГҐГ«Г ГІГј Г±ГЁГ±ГІГҐГ¬Гі ГЁГўГҐГ­ГІГ®Гў Г± ГЇГ°ГЁГўГїГ§ГЄГ®Г© ГЄГ® Г¤Г­Гѕ; ГЄГ®Г«Г«ГЎГЅГЄГЁ Гў Г±ГІГ°Г®ГЄГЁ
 
--- MCCS-либы для поддержки скрипта лутбокса(Gerter 15.11.21)
+-- MCCS-Г«ГЁГЎГ» Г¤Г«Гї ГЇГ®Г¤Г¤ГҐГ°Г¦ГЄГЁ Г±ГЄГ°ГЁГЇГІГ  Г«ГіГІГЎГ®ГЄГ±Г (Gerter 15.11.21)
 doFile(GetMapDataPath().."MCCS_Scripts.lua")
 --
 
@@ -20,7 +20,7 @@ function StartBonusCheck()
   for i=1,2 do
   for res, amount in StartBonuses[d] do
     res = res + 0
-    --print('Должно быть: ', amount, '. Имеется: ', GetPlayerResource(i, res))
+    --print('Г„Г®Г«Г¦Г­Г® ГЎГ»ГІГј: ', amount, '. Г€Г¬ГҐГҐГІГ±Гї: ', GetPlayerResource(i, res))
     if GetPlayerResource(i, res)>amount then
       if res == 0 or res == 1 then
         SetPlayerResource(i, res, amount+3)
@@ -33,91 +33,142 @@ function StartBonusCheck()
 end
 StartBonusCheck()
 
--- замена обычных MessageBox'ов на MCCS-шные для фикса бага с интерфейсом(Gerter 15.11.21)
+-- Г§Г Г¬ГҐГ­Г  Г®ГЎГ»Г·Г­Г»Гµ MessageBox'Г®Гў Г­Г  MCCS-ГёГ­Г»ГҐ Г¤Г«Гї ГґГЁГЄГ±Г  ГЎГ ГЈГ  Г± ГЁГ­ГІГҐГ°ГґГҐГ©Г±Г®Г¬(Gerter 15.11.21)
 while not MCCS_MessageBoxForPlayers do
   sleep()
 end
 startThread(MCCS_MessageBoxForPlayers, PLAYER_1, GetMapDataPath().."message.txt")
 startThread(MCCS_MessageBoxForPlayers, PLAYER_2, GetMapDataPath().."message.txt")
 
-function NewDay()
-if GetDate(DAY)==2 then
-  for i=1, 2 do
-   if GetPlayerRace(i)== TOWN_FORTRESS then --Для гнома
-     local player=i;
-     print("1")
-       for j=1, 6 do
-         SetPlayerResource(player, j-1, GetPlayerResource(player, j-1)+3)--Число после знака сложения - количество добавляемых ресурсов
-       end;
-     startThread(MCCS_MessageBoxForPlayers, i, {GetMapDataPath().."GotResources.txt"; amount=3})
-   elseif GetPlayerRace(i)== TOWN_ACADEMY then --Для мага
-     local player=i;
-       for j=1, 6 do
-         SetPlayerResource(player, j-1, GetPlayerResource(player, j-1)+7)--Число после знака сложения - количество добавляемых ресурсов
-       end;
-     startThread(MCCS_MessageBoxForPlayers, i, {GetMapDataPath().."GotResources.txt"; amount=7})
-   elseif GetPlayerRace(i)== TOWN_HEAVEN then
-     SetPlayerResource(i, 6, GetPlayerResource(i, 6)+5000)
-     startThread(MCCS_MessageBoxForPlayers, i, {GetMapDataPath().."GotGold.txt"; amount=5000})
-   elseif GetPlayerRace(i)== TOWN_DUNGEON then
-     towns=GetObjectNamesByType("TOWN");
-       for key, name in towns do
-         if GetObjectOwner(name)==i then
-           AddObjectCreatures(name, CREATURE_SCOUT, 4)
-           AddObjectCreatures(name, CREATURE_WITCH, 3)
-           AddObjectCreatures(name, CREATURE_MINOTAUR , 3)
-         end;
-       end;
-      startThread(MCCS_MessageBoxForPlayers, i, GetMapDataPath().."TownGotCreatures.txt")
-   end;
-  end;
-elseif GetDate(DAY)==29 then
-  startThread(MCCS_MessageBoxForPlayers, PLAYER_1, GetMapDataPath().."BattleInWeek.txt")
-  startThread(MCCS_MessageBoxForPlayers, PLAYER_2, GetMapDataPath().."BattleInWeek.txt")
-elseif GetDate(DAY)==33 then
-  startThread(MCCS_MessageBoxForPlayers, PLAYER_1, GetMapDataPath().."BattleNextDay.txt")
-  startThread(MCCS_MessageBoxForPlayers, PLAYER_2, GetMapDataPath().."BattleNextDay.txt")
-elseif GetDate(DAY)==34 then  --Цифра после знака равенства - номер дня телепортации  34
-  -- ОПРЕДЕЛИТЕЛЬ СИЛЬНЕЙШЕГО ГЕРОЯ ПО МАКСИМАЛЬНОМУ УРОВНЮ РАЗВИТИЯ --
-  local max_lvl=0
-  local t=0
-  for key, hero in GetPlayerHeroes(1) do
-    if GetHeroLevel(hero)>max_lvl then
-     max_lvl=max_lvl+GetHeroLevel(hero)
-     t=key;
+-------------------------------------------------------------------------------------------
+-- NewDay trigger
+
+NewDay =
+{
+  msg_path = GetMapDataPath().."Messages/",
+
+  new_day_func =
+  function()
+    local day = GetDate(DAY)
+    if day == 2 then
+      for player = PLAYER_1, PLAYER_2 do
+        startThread(NewDay.Day2Messages, player)
+        startThread(NewDay.GiveGoldToHumans, player)
+        startThread(NewDay.GiveGrowToDungeon, player)
+      end
+    elseif day == 29 then -- 29
+      startThread(MCCS_MessageBoxForPlayers, PLAYER_1, GetMapDataPath().."BattleInWeek.txt")
+      startThread(MCCS_MessageBoxForPlayers, PLAYER_2, GetMapDataPath().."BattleInWeek.txt")
+    elseif day == 33 then -- 33
+      for player = PLAYER_1, PLAYER_2 do
+        startThread(MCCS_MessageBoxForPlayers, player, GetMapDataPath().."BattleNextDay.txt")
+        startThread(NewDay.GiveResourcesToMages, player)
+        startThread(NewDay.GiveResourcesToDwarves, player)
+      end
+    elseif day == 34 then -- 34
+      startThread(NewDay.StartFinalFight)
+    end
+  end,
+
+  Init =
+  function()
+    Trigger(NEW_DAY_TRIGGER, "NewDay.new_day_func")
+  end,
+
+  academy_res = {[0] = 15; 15, 10, 10, 10, 10},
+
+  GiveResourcesToMages =
+  function(player)
+    if GetPlayerRace(player) == TOWN_ACADEMY then
+      startThread(MCCS_MessageBoxForPlayers, player, NewDay.msg_path.."day33_mages.txt")
+      for res = WOOD, GEM do 
+        local curr_count = GetPlayerResource(player, res)
+        SetPlayerResource(player, res, curr_count + NewDay.academy_res[res])
+      end
+    end
+  end,
+
+  GiveResourcesToDwarves =
+  function(player)
+    if GetPlayerRace(player) == TOWN_FORTRESS then
+      startThread(MCCS_MessageBoxForPlayers, player, NewDay.msg_path.."day33_dwarves.txt")
+      for res = WOOD, GEM do
+        local curr_count = GetPlayerResource(player, res)
+        SetPlayerResource(player, res, curr_count + 4)
+      end
+    end
+  end,
+
+  GiveGoldToHumans =
+  function(player)
+    if GetPlayerRace(player)== TOWN_HEAVEN then
+     SetPlayerResource(player, 6, GetPlayerResource(player, 6)+5000)
+     startThread(MCCS_MessageBoxForPlayers, player, {GetMapDataPath().."GotGold.txt"; amount=5000})
+    end
+  end,
+
+  GiveGrowToDungeon =
+  function(player)
+    if GetPlayerRace(player)== TOWN_DUNGEON then
+      for i, town in GetObjectNamesByType("TOWN") do
+        if GetObjectOwner(town) == player then
+          AddObjectCreatures(town, CREATURE_SCOUT, 4)
+          AddObjectCreatures(town, CREATURE_WITCH, 3)
+          AddObjectCreatures(town, CREATURE_MINOTAUR , 3)
+        end
+      end
+      startThread(MCCS_MessageBoxForPlayers, player, GetMapDataPath().."TownGotCreatures.txt")
+    end
+  end,
+
+  Day2Messages =
+  function(player)
+    if contains({TOWN_ACADEMY, TOWN_FORTRESS}, GetPlayerRace(player)) then
+      startThread(MCCS_MessageBoxForPlayers, player, NewDay.msg_path.."day2_mages.txt")
+    end
+  end,
+
+  StartFinalFight =
+  function()
+    local max_lvl=0
+    local t=0
+    for key, hero in GetPlayerHeroes(1) do
+      if GetHeroLevel(hero)>max_lvl then
+        max_lvl=max_lvl+GetHeroLevel(hero)
+        t=key;
+      end;
     end;
-  end;
-  hero1=GetPlayerHeroes(1)[t]
-  sleep(1)
-  if IsObjectExists(GetPlayerHeroes(1)[t])== nil then
-    startThread(MCCS_MessageBoxForPlayers, PLAYER_1, GetMapDataPath().."Hero in town.txt")
-  else
-  SetObjectRotation(GetPlayerHeroes(1)[t], 90)
-  SetObjectPosition(GetPlayerHeroes(1)[t], 18, 28, UNDERGROUND, 4) --"33, 22" - координаты телепортации героя игрока 1
-  OpenRegionFog(1, "BattlefieldFog")
-  sleep(5)
-  local max_lvl=0
-  local t=0
-  for key, hero in GetPlayerHeroes(2) do
-    if GetHeroLevel(hero)>max_lvl then
-     max_lvl=max_lvl+GetHeroLevel(hero)
-     t=key;
-    end;
-  end;
-  hero2=GetPlayerHeroes(2)[t]
-  sleep(1)
-  if IsObjectExists(GetPlayerHeroes(2)[t])==nil then
-    startThread(MCCS_MessageBoxForPlayers, PLAYER_2, GetMapDataPath().."Hero in town.txt")
-  else
-  SetObjectRotation(GetPlayerHeroes(2)[t], 270)
-  SetObjectPosition(GetPlayerHeroes(2)[t], 50, 28, UNDERGROUND, 4) --"26, 22" - координаты телепортации героя игрока 2
-  OpenRegionFog(2, "BattlefieldFog")
-  Trigger(PLAYER_REMOVE_HERO_TRIGGER, 1, 'HeroDefeated')
-  Trigger(PLAYER_REMOVE_HERO_TRIGGER, 2, 'HeroDefeated')
-  end;
-  end;
-end;
-end;
+    hero1=GetPlayerHeroes(1)[t]
+    sleep(1)
+    if IsObjectExists(GetPlayerHeroes(1)[t])== nil then
+      startThread(MCCS_MessageBoxForPlayers, PLAYER_1, GetMapDataPath().."Hero in town.txt")
+    else
+      SetObjectRotation(GetPlayerHeroes(1)[t], 90)
+      SetObjectPosition(GetPlayerHeroes(1)[t], 18, 28, UNDERGROUND, 4)
+      OpenRegionFog(1, "BattlefieldFog")
+      sleep(5)
+      local max_lvl=0
+      local t=0
+      for key, hero in GetPlayerHeroes(2) do
+        if GetHeroLevel(hero)>max_lvl then
+         max_lvl=max_lvl+GetHeroLevel(hero)
+         t=key;
+        end;
+      end;
+      hero2=GetPlayerHeroes(2)[t]
+      sleep(1)
+      if IsObjectExists(GetPlayerHeroes(2)[t])==nil then
+        startThread(MCCS_MessageBoxForPlayers, PLAYER_2, GetMapDataPath().."Hero in town.txt")
+      else
+        SetObjectRotation(GetPlayerHeroes(2)[t], 270)
+        SetObjectPosition(GetPlayerHeroes(2)[t], 50, 28, UNDERGROUND, 4)
+        OpenRegionFog(2, "BattlefieldFog")
+        Trigger(PLAYER_REMOVE_HERO_TRIGGER, 1, 'HeroDefeated')
+        Trigger(PLAYER_REMOVE_HERO_TRIGGER, 2, 'HeroDefeated')
+      end;
+    end
+  end
+}
 
 function HeroDefeated(hero, killer)
   if killer then
@@ -132,7 +183,9 @@ function Win_(pl)
   return parse ''
 end
 
-Trigger(NEW_DAY_TRIGGER, "NewDay");
+startThread(NewDay.Init)
+--------------------------------------------------------------------------------------------------------
+-- end of NewDay
 
 
 function Chest(hero, obj)
@@ -150,7 +203,7 @@ Trigger(OBJECT_TOUCH_TRIGGER, "Chest1", "Chest")
 Trigger(OBJECT_TOUCH_TRIGGER, "Chest2", "Chest")
 
 --------------------------------------------------------------------------------
--- скрипт лутбокса(Gerter 15.11.21)
+-- СЃРєСЂРёРїС‚ Р»СѓС‚Р±РѕРєСЃР° (Gerter 15.11.21)
 LOOTBOX_GOLD_COST = 7000
 
 while not InitArtTiersTables do
@@ -193,8 +246,8 @@ for i, object in {"lootbox_p1", "lootbox_p2"} do
 end
 --
 --------------------------------------------------------------------------------
--- добавление новых существ к случайным стекам(Gerter 20.11.21)
--- upd 21.11.21 - обобщена логика замен.
+-- Г¤Г®ГЎГ ГўГ«ГҐГ­ГЁГҐ Г­Г®ГўГ»Гµ Г±ГіГ№ГҐГ±ГІГў ГЄ Г±Г«ГіГ·Г Г©Г­Г»Г¬ Г±ГІГҐГЄГ Г¬(Gerter 20.11.21)
+-- upd 21.11.21 - Г®ГЎГ®ГЎГ№ГҐГ­Г  Г«Г®ГЈГЁГЄГ  Г§Г Г¬ГҐГ­.
 stack_replacer =
 {
   stacks_info =
@@ -339,7 +392,7 @@ stack_balancer =
 }
 --
 --------------------------------------------------------------------------------
--- Обновленная механика ментора(Gerter 21.11.21)
+-- ГЋГЎГ­Г®ГўГ«ГҐГ­Г­Г Гї Г¬ГҐГµГ Г­ГЁГЄГ  Г¬ГҐГ­ГІГ®Г°Г (Gerter 21.11.21)
 mentor =
 {
   cost = 18000,
@@ -386,7 +439,7 @@ function CommonAddHero(hero)
   ChosenOfTheChaos.Init()
 end
 
--- Если появятся другие герои со спецой Ниброса, добавить таблицу
+-- Г…Г±Г«ГЁ ГЇГ®ГїГўГїГІГ±Гї Г¤Г°ГіГЈГЁГҐ ГЈГҐГ°Г®ГЁ Г±Г® Г±ГЇГҐГ¶Г®Г© ГЌГЁГЎГ°Г®Г±Г , Г¤Г®ГЎГ ГўГЁГІГј ГІГ ГЎГ«ГЁГ¶Гі
 ChosenOfTheChaos = {
 heroes = {['Jazaz'] = {given = nil}},
 
